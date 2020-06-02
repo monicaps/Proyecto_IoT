@@ -9,6 +9,8 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="../css/dist/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"></script>
     <link href="../css/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/page.css" rel="stylesheet">
     <!--<link rel="stylesheet" type="text/css" href="../css/cliente.css">-->
@@ -16,7 +18,7 @@
 </head>
 <body>
   <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="principal.php">Tablero IoT</a>
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0">Tablero IoT</a>
     <ul class="navbar-nav px-3">
       <li class="nav-item text-nowrap">
         <a class="nav-link" href="../index.html">Cerrar Sesi&oacute;n</a>
@@ -35,21 +37,15 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#actividad">
-                <span data-feather="activity"></span>
-                Actividad de la placa
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#usuarios">
-                <span data-feather="users"></span>
-                Usuarios ESP32
-              </a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link" href="#cubo">
                 <span data-feather="code"></span>
                 Instrucciones Cubo
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#actividad">
+                <span data-feather="activity"></span>
+                Actividad de la placa
               </a>
             </li>
           </ul>
@@ -65,52 +61,31 @@
           <div class="col-sm-6">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Encender LEDS </h5>
-                <p class="card-text">Tarjeta piloto para maquetado 1</p>
-                <a href="#" class="btn btn-outline-success">Encender</a>
+                <h5 class="card-title">Encender LED de Placa ESP32</h5>
+                <p class="card-text">Hacer prueba simple de funcionamiento placa-p&aacute;gina</p>
+                <button onclick="command(1)" class="btn btn-outline-success">Encender</button>
               </div>
             </div>
           </div>
           <div class="col-sm-6">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Apagar LEDS</h5>
-                <p class="card-text">Tarjeta piloto para maquetado 2</p>
-                <a href="#" class="btn btn-outline-danger">Apagar</a>
+                <h5 class="card-title">Apagar LED de la placa ESP32</h5>
+                <p class="card-text">Terminar prueba simple de funcionamiento placa-p&aacute;gina</p>
+                <button onclick="command(0)" class="btn btn-outline-danger">Apagar</button>
               </div>
             </div>
           </div>
         </div>
         <br><br>
-        <div class="card" id="actividad">
-          <div class="card-header">
-            Actividad de la placa
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">Special title treatment</h5>
-            <p class="card-text">Tarjeta piloto para maquetado 3</p>
-            <a href="#" class="btn btn-primary">Boton</a>
-          </div>
-        </div>
-        <br><br>
-        <div class="card" id="usuarios">
-          <div class="card-header">
-            Usuarios ESP32
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">Special title treatment</h5>
-            <p class="card-text">Tarjeta piloto para maquetado 4</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
-        <br><br>
+        <!--Trajeta donde se van a mandar llamar las animaciones-->
         <div class="card" id="cubo">
           <div class="card-header">
-            Instrucciones del cubo
+            Manejo del Cubo
           </div>
           <div class="card-body">
-            <h5 class="card-title">Special title treatment</h5>
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+            <h5 class="card-title">Animaciones</h5>
+            <p class="card-text">Elige alguna de las 3 animaciones que quieres desplegar en tu cubo LED</p>
             <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
             <table class="table table-sm">
               <thead>
@@ -123,29 +98,42 @@
                 <tr>
                   <th scope="row" rowspan="3"><a>Link de imagen</a></th>
                   <td>
-                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
-                    <label class="form-check-label" for="exampleRadios1">Animación 1</label>
+                    <input class="form-check-input" type="radio" name="animacion" id="animacion1" value="1" checked>
+                    <label class="form-check-label" for="animacion1">Animación 1</label>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                    <label class="form-check-label" for="exampleRadios2">Animación 2</label>
+                    <input class="form-check-input" type="radio" name="animacion" id="animacion2" value="2">
+                    <label class="form-check-label" for="animacion2">Animación 2</label>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3">
-                    <label class="form-check-label" for="exampleRadios3">Animación 3</label>
+                    <input class="form-check-input" type="radio" name="animacion" id="animacion3" value="3">
+                    <label class="form-check-label" for="animacion3">Animación 3</label>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            <button type="button" onclick="prueba()" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
               Desplegar en el cubo
             </button>
           </div>
         </div>
+        <br><br>
+        <div class="card" id="actividad">
+          <div class="card-header">
+            Actividad de la placa
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Mensajes de la ESP-32</h5>
+            <p class="card-text" id="card-text-status"></p>
+            <p class="card-text" id="card-text-msj"></p>
+            <!--<a href="#" class="btn btn-primary">Boton</a>-->
+          </div>
+        </div>
+        <br><br>
       </main>
     </div>
   </div>
@@ -160,15 +148,17 @@
           </button>
         </div>
         <div class="modal-body">
-          Quiere ejecutar esta animaci&oacute;n?
+          <!--El texto de modal lo insertara la funcion prueba en el script-->
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Ejecutar</button>
+          <button type="button" onclick="" class="btn btn-primary">Ejecutar</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
         </div>
       </div>
     </div>
   </div>
+  <!--Script para vincular con Arduino-->
+  <script src="../jsarduino/scriptArduino.js"></script>
   <!--Footer de pagina-->
   <footer class="my-5 pt-5 text-muted text-center text-small">
     <p class="mb-1">&copy; 2017-2019 Betelgeulse Company México</p>
