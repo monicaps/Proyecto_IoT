@@ -1,31 +1,38 @@
 #include <Arduino.h>
+#include <PubSubClient.h>
+#include <WiFi.h>
+
+//const char* ssid = "e719ae";
+//const char* password = "273931638";
+const char* ssid = "Totalplay-799C";
+const char* password = "799CF6A7qc5hevky";
+
+const char *mqtt_server = "soldier.cloudmqtt.com";
+const int mqtt_port = 17044;
+const char *mqtt_user = "mqwrwnph";
+const char *mqtt_pass = "mlb5VPLWeuj6";
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+long lastMsg = 0;
+char msg[50];
+int value = 0;
+
+
 
 //initializing and declaring led rows
-  int column[16]={12,14,25,33,32,35,15,2,4,5,16,19,21,22,23,17};
+  int column[16]={12,14,25,33,32,17,16,3,2,4,5,19,21,22,23,1};
 //initializing and declaring led layers
  //int layer[4]={A3,A2,A1,A0};
- int layer[4]={13,26,27,34};//{A3,A2,A1,A0};
+ int layer[4]={13,26,27,15};//{A3,A2,A1,A0};
 
   //int time = 250;
 
-void setup()
-{
-  //setting rows to ouput
-  for(int i = 0; i<16; i++)
-  {
-    pinMode(column[i], OUTPUT);
-  }
-  //setting layers to output
-  for(int i = 0; i<4; i++)
-  {
-    pinMode(layer[i], OUTPUT);
-  }
-  //seeding random for random pattern
-  randomSeed(analogRead(10));
-}
 
 //xxxxxxxxxxxxxxxxxxxxFUNCTIONSxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
 
 ///////////////////////////////////////////////////////////turn all off
 void turnEverythingOff()
@@ -713,29 +720,200 @@ void goThroughAllLedsOneAtATime()
   }
 }
 
+
+
+
+////////////////////////////// Conexión wifi ////////////////////////////////////////////7
+
+
+
+void callback(char* topic, byte* payload, unsigned int lenght){
+	Serial.println("Mensaje recibido bajo el topico -> ");
+	Serial.println(topic);
+	Serial.println("\n");
+	
+	for(int i=0; i<lenght; i++){
+		Serial.println((char)payload[i]);
+	}
+	
+	if((char)payload[0]=='0'){
+		digitalWrite(BUILTIN_LED, LOW);
+		Serial.println("\n Led Apagado");
+	}else if((char)payload[0]=='a'){
+		for(int p=0; p<4; p++){
+			turnEverythingOn();
+		}
+	}else if((char)payload[0]=='b'){
+		for(int q=0; q<4; q++){
+			turnOnAndOffAllByLayerUpAndDownNotTimed();
+		}
+	}else if((char)payload[0]=='c'){
+		for(int r=0; r<4; r++){
+			turnEverythingOff();
+		}
+	}else if((char)payload[0]=='d'){
+		for(int s=0; s<4; s++){
+			flickerOn();
+		}
+	}else if((char)payload[0]=='e'){
+		for(int t=0; t<4; t++){
+			layerstompUpAndDown();
+		}
+	}
+	
+	/*Estructura de llamado alternativa*/
+	/*do{
+		char msj=(char)payload[0];
+		switch(msj){
+			case '0':
+				digitalWrite(BUILTIN_LED, LOW);
+				Serial.println("\n Led Apagado");
+			break;
+			
+			case '1':
+				digitalWrite(BUILTIN_LED, HIGH);
+				Serial.println("\n Led Apagado");
+			break;
+				
+			case 'a':
+				for(int p=0; p<4; p++){
+					turnEverythingOn();
+				}
+			break;
+				
+			case 'b':
+				for(int q=0; q<4; q++){
+					turnOnAndOffAllByLayerUpAndDownNotTimed();
+				}
+			break;
+				
+			case 'c':
+				for(int r=0; r<4; r++){
+					turnEverythingOff();
+				}
+			break;
+				
+			case 'd':
+				for(int s=0; s<4; s++){
+					flickerOn();
+				}
+			break;
+				
+			case 'e':
+				for(int t=0; t<4; t++){
+					layerstompUpAndDown();
+				}
+			break;
+		}
+	}while((char)payload[0]=! null);*/
+}
+
+
+
+void reconnect(){
+  while(!client.connected()){
+    Serial.println("Intentando Conexion MQTT");
+
+    String clientId = "iot_1_";
+    clientId = clientId + String(random(0xffff),HEX);
+
+    if(client.connect(clientId.c_str(),mqtt_user,mqtt_pass)){
+      Serial.println("Conexion a MQTT exitosa!!!");
+      client.publish("Salida","Primer mensaje");
+      client.subscribe("Entrada");
+    }else{
+      Serial.println("Fallo la conexion");
+      Serial.println(client.state());
+      Serial.println("Se intentara de nuevo en 5 segundos");
+      delay(5000);
+    }
+  }
+}
+
+void setup_wifi(){
+  Serial.println();
+  Serial.println("Conectando a...");
+  Serial.println(ssid);
+
+  WiFi.begin(ssid,password);
+
+  while(WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.println(".");
+  }
+
+  Serial.println("");
+  Serial.println("Conectando a red WiFi!");
+  Serial.println("Direccion IP: ");
+  Serial.println(WiFi.localIP());
+}
+
+
+//////////////////////////// SET UP
+
+void setup()
+{
+  //setting rows to ouput
+  pinMode(BUILTIN_LED,OUTPUT);
+  Serial.begin(115200);
+  setup_wifi();
+  client.setServer(mqtt_server, mqtt_port);
+  client.setCallback(callback);
+
+
+  for(int i = 0; i<16; i++)
+  {
+    pinMode(column[i], OUTPUT);
+  }
+  //setting layers to output
+  for(int i = 0; i<4; i++)
+  {
+    pinMode(layer[i], OUTPUT);
+  }
+  //seeding random for random pattern
+  randomSeed(analogRead(10));
+
+
+
+}
+
+
 //xxxxxxxxxxxxxxxxxxxxFUNCTION LOOPxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-
 void loop()
 {
-  turnEverythingOff();//turn all off
-  flickerOn();
-  turnEverythingOn();//turn all on
+
+  if(client.connected() == false){
+  reconnect();
+}
+
+client.loop();
+if(millis() - lastMsg > 2000){
+  lastMsg = millis();
+  value++;
+  String mes = "Valor -> " + String(value);
+  mes.toCharArray(msg,50);
+  client.publish("Salida",msg);
+  Serial.println("Mensaje enviado -> " + String(value));
+}
+   //turnEverythingOff();//turn all off
+  //flickerOn();
+  // turnEverythingOn();//turn all on
   //delay(time);
-  turnOnAndOffAllByLayerUpAndDownNotTimed();
-  layerstompUpAndDown();
-  turnOnAndOffAllByColumnSideways();
+  //turnOnAndOffAllByLayerUpAndDownNotTimed();
+  //layerstompUpAndDown();
+  //turnOnAndOffAllByColumnSideways
   //delay(time);
-  aroundEdgeDown();
-  turnEverythingOff();
-  randomflicker();
-  randomRain();
-  diagonalRectangle();
-  goThroughAllLedsOneAtATime();
-  propeller();
-  spiralInAndOut();
-  flickerOff();
-  turnEverythingOff();
+  //aroundEdgeDown();
+  //turnEverythingOff();
+  //randomflicker();
+  //randomRain();
+  //diagonalRectangle();
+  //goThroughAllLedsOneAtATime();
+  //propeller();
+  //spiralInAndOut();
+  //flickerOff();
+  //turnEverythingOff();
   delay(2000);
 }
