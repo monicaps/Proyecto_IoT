@@ -1,25 +1,30 @@
 var clientId='client_id_'+Math.floor((Math.random()+1000000)+1);
-client=new Paho.MQTT.Client("servidor",32480,clientId);//servidor,websocket port
+client=new Paho.MQTT.Client("soldier.cloudmqtt.com",37044,clientId);//servidor,websocket port
 
 client.onConnectionLost= onConnectionLost;
 client.onMessageArrived= onMessageArrived;
 
 var options={
     useSSL:true,
-    userName:"",
-    password:"",
+    userName:"mqwrwnph",
+    password:"mlb5VPLWeuj6",
     onSuccess:onConnect,
     onFailure:doFail
 }
 
+client.connect(options);
 
 function onConnect(){
-    $("#card-text-status").html("Conexion Establecida");
+    $("#status").html("Conexion Establecida");
     client.subscribe("salida");
 }
 
 function onMessageArrived(message){
     $("#card-text-msj").html(message.payloadString);
+}
+
+function doFail(e){
+    console.log(e);
 }
 
 function onConnectionLost(responseObject){
@@ -28,14 +33,17 @@ function onConnectionLost(responseObject){
     }
 }
 
+//funcion que envia el valor a traves del servidor
 function command(value){
+    console.log("Mensaje para mandar llamar a la animacion "+value);
     message= new Paho.MQTT.Message(value+"");
     message.destinationName="entrada";
     client.send(message);
 }
 
-//función prueba para mostrar datos a traves del modal
 function prueba(){
     var valueAnimacion=$('input:radio[name=animacion]:checked').val(); //obtener los valores del radiobutton
-    $(".modal-body").html("&iquest;Desea ejecutar esta animaci&oacute;n?<br>Animaci&oacute;n "+valueAnimacion);
+    $("#descripcionAnimacion").html("Ejecutando la animaci&oacute;n "+valueAnimacion);
+    console.log("Animacion:"+valueAnimacion);
+    command(valueAnimacion);
 }

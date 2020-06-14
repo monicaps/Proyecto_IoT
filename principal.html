@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Page with HTML5, CSS and JavaScript for the consuming Web Services REST">
     <meta name="author" content="Monica Portillo">
-    <link rel="icon" type="image/png" href="../images/icons/ordenador.png"/>
+    <link rel="icon" type="image/png" href="images/icons/ordenador.png"/>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="css/dist/js/bootstrap.min.js"></script>
@@ -42,12 +42,12 @@
                 Instrucciones Cubo
               </a>
             </li>
-            <li class="nav-item">
+            <!--<li class="nav-item">
               <a class="nav-link" href="#actividad">
                 <span data-feather="activity"></span>
                 Actividad de la placa
               </a>
-            </li>
+            </li>-->
           </ul>
         </div>
       </nav>
@@ -56,7 +56,63 @@
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
           <h1 class="h2">Tablero del Administrador</h1>
         </div>
-        <h2>Principal</h2>
+        <h2 id="status">Principal</h2>
+        <!--Tarjeta donde se van a mandar llamar las animaciones-->
+        <div class="card" id="cubo">
+          <div class="card-header">
+            Manejo del Cubo
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Animaciones</h5>
+            <p class="card-text">Elige alguna de las 5 animaciones que quieres desplegar en tu cubo LED</p>
+            <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th scope="col" id="cabeceraDescripcion">Descripción</th>
+                  <th scope="col">Animación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row" rowspan="5" id="descripcionAnimacion"></th>
+                  <td>
+                    <input class="form-check-input" type="radio" name="animacion" id="animacion1" value="a" checked>
+                    <label class="form-check-label" for="animacion1">Animación 1</label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input class="form-check-input" type="radio" name="animacion" id="animacion2" value="b">
+                    <label class="form-check-label" for="animacion2">Animación 2</label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input class="form-check-input" type="radio" name="animacion" id="animacion3" value="c">
+                    <label class="form-check-label" for="animacion3">Animación 3</label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input class="form-check-input" type="radio" name="animacion" id="animacion4" value="d">
+                    <label class="form-check-label" for="animacion4">Animación 4</label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input class="form-check-input" type="radio" name="animacion" id="animacion5" value="e">
+                    <label class="form-check-label" for="animacion5">Animación 5</label>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button type="button" onclick="prueba()" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+              Desplegar en el cubo
+            </button>
+          </div>
+        </div>
+        <br><br>
         <div class="row">
           <div class="col-sm-6">
             <div class="card border-dark mb-3">
@@ -78,51 +134,7 @@
           </div>
         </div>
         <br><br>
-        <!--Trajeta donde se van a mandar llamar las animaciones-->
-        <div class="card" id="cubo">
-          <div class="card-header">
-            Manejo del Cubo
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">Animaciones</h5>
-            <p class="card-text">Elige alguna de las 3 animaciones que quieres desplegar en tu cubo LED</p>
-            <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
-            <table class="table table-sm">
-              <thead>
-                <tr>
-                  <th scope="col">Descripción</th>
-                  <th scope="col">Animación</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row" rowspan="3" id="descripcionAnimacion">Animacion</th>
-                  <td>
-                    <input class="form-check-input" type="radio" name="animacion" id="animacion1" value="1" checked>
-                    <label class="form-check-label" for="animacion1">Animación 1</label>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <input class="form-check-input" type="radio" name="animacion" id="animacion2" value="2">
-                    <label class="form-check-label" for="animacion2">Animación 2</label>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <input class="form-check-input" type="radio" name="animacion" id="animacion3" value="3">
-                    <label class="form-check-label" for="animacion3">Animación 3</label>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <button type="button" onclick="prueba()" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-              Desplegar en el cubo
-            </button>
-          </div>
-        </div>
-        <br><br>
-        <div class="card" id="actividad">
+        <!--<div class="card" id="actividad">
           <div class="card-header">
             Actividad de la placa
           </div>
@@ -130,35 +142,12 @@
             <h5 class="card-title">Mensajes de la ESP-32</h5>
             <p class="card-text" id="card-text-status"></p>
             <p class="card-text" id="card-text-msj"></p>
-            <!--<a href="#" class="btn btn-primary">Boton</a>-->
+            <a href="#" class="btn btn-primary">Boton</a>
           </div>
-        </div>
-        <br><br>
+        </div>-->
       </main>
     </div>
   </div>
-  <!--Modal-->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Confirmación</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <!--El texto de modal lo insertara la funcion prueba en el script-->
-        </div>
-        <div class="modal-footer">
-          <button type="button" onclick="" class="btn btn-primary">Ejecutar</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!--Script para vincular con Arduino-->
-  <script src="jsarduino/scriptArduino.js"></script>
   <!--Footer de pagina-->
   <footer class="my-5 pt-5 text-muted text-center text-small">
     <p class="mb-1">&copy; 2017-2019 Betelgeulse Company México</p>
@@ -173,9 +162,10 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script>window.jQuery || document.write('<script src="css/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="../css/vendor/popper.min.js"></script>
-    <script src="../css/dist/js/bootstrap.min.js"></script>
-
+    <script src="css/vendor/popper.min.js"></script>
+    <script src="css/dist/js/bootstrap.min.js"></script>
+            <!--Script para vincular con ESP32-->
+  <script src="jsarduino/scriptArduino.js"></script>
     <!-- Icons -->
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>
