@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Page with HTML5, CSS and JavaScript for the consuming Web Services REST">
-    <meta name="author" content="Monica Portillo">
+    <meta name="description" content="Page with HTML5, CSS and JavaScript">
+    <meta name="author" content="Monica Portillo, Iván Gonzalez, Brenda Tapia">
     <link rel="icon" type="image/png" href="images/icons/ordenador.png"/>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
@@ -13,7 +13,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"></script>
     <link href="css/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/page.css" rel="stylesheet">
-    <!--<link rel="stylesheet" type="text/css" href="../css/cliente.css">-->
   <title>Administrador</title>
 </head>
 <body>
@@ -42,19 +41,14 @@
                 Instrucciones Cubo
               </a>
             </li>
-            <!--<li class="nav-item">
-              <a class="nav-link" href="#actividad">
-                <span data-feather="activity"></span>
-                Actividad de la placa
-              </a>
-            </li>-->
           </ul>
         </div>
       </nav>
 
       <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-          <h1 class="h2">Tablero del Administrador</h1>
+          <img src="images/icons/cubito.png" class="img-thumbnail" alt="logo">
+          <h1 class="h2">Animaciones para Cubo LED</h1>
         </div>
         <h2 id="status">Principal</h2>
         <!--Tarjeta donde se van a mandar llamar las animaciones-->
@@ -64,7 +58,7 @@
           </div>
           <div class="card-body">
             <h5 class="card-title">Animaciones</h5>
-            <p class="card-text">Elige alguna de las 5 animaciones que quieres desplegar en tu cubo LED</p>
+            <p class="card-text">Elige alguna de las 7 animaciones que quieres desplegar en tu cubo LED</p>
             <!--<a href="#" class="btn btn-primary">Go somewhere</a>-->
             <table class="table table-sm">
               <thead>
@@ -75,76 +69,59 @@
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row" rowspan="5" id="descripcionAnimacion"></th>
+                  <th scope="row" rowspan="7">
+                    <p id="descripcionAnimacion"></p>
+                    <img src="images/ledcube.jpeg" class="img-fluid" alt="Responsive image">
+                  </th>
                   <td>
                     <input class="form-check-input" type="radio" name="animacion" id="animacion1" value="a" checked>
-                    <label class="form-check-label" for="animacion1">Animación 1</label>
+                    <label class="form-check-label" for="animacion1">Encender Cubo</label>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <input class="form-check-input" type="radio" name="animacion" id="animacion2" value="b">
-                    <label class="form-check-label" for="animacion2">Animación 2</label>
+                    <label class="form-check-label" for="animacion2">Apagar Cubo</label>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <input class="form-check-input" type="radio" name="animacion" id="animacion3" value="c">
-                    <label class="form-check-label" for="animacion3">Animación 3</label>
+                    <label class="form-check-label" for="animacion3">Secuencia Flash</label>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <input class="form-check-input" type="radio" name="animacion" id="animacion4" value="d">
-                    <label class="form-check-label" for="animacion4">Animación 4</label>
+                    <label class="form-check-label" for="animacion4">Espiral</label>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <input class="form-check-input" type="radio" name="animacion" id="animacion5" value="e">
-                    <label class="form-check-label" for="animacion5">Animación 5</label>
+                    <label class="form-check-label" for="animacion5">Flash Random</label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input class="form-check-input" type="radio" name="animacion" id="animacion6" value="f">
+                    <label class="form-check-label" for="animacion6">Arriba-Abajo</label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input class="form-check-input" type="radio" name="animacion" id="animacion7" value="g">
+                    <label class="form-check-label" for="animacion7">Parpadeo</label>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <button type="button" onclick="prueba()" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            <button type="button" onclick="prueba()" class="btn btn-primary">
               Desplegar en el cubo
             </button>
           </div>
         </div>
         <br><br>
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="card border-dark mb-3">
-              <div class="card-body">
-                <h5 class="card-title">Encender LED de Placa ESP32</h5>
-                <p class="card-text">Hacer prueba simple de funcionamiento placa-p&aacute;gina</p>
-                <button onclick="command(1)" class="btn btn-outline-success">Encender</button>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="card border-dark mb-3">
-              <div class="card-body">
-                <h5 class="card-title">Apagar LED de la placa ESP32</h5>
-                <p class="card-text">Terminar prueba simple de funcionamiento placa-p&aacute;gina</p>
-                <button onclick="command(0)" class="btn btn-outline-danger">Apagar</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <br><br>
-        <!--<div class="card" id="actividad">
-          <div class="card-header">
-            Actividad de la placa
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">Mensajes de la ESP-32</h5>
-            <p class="card-text" id="card-text-status"></p>
-            <p class="card-text" id="card-text-msj"></p>
-            <a href="#" class="btn btn-primary">Boton</a>
-          </div>
-        </div>-->
       </main>
     </div>
   </div>
@@ -164,8 +141,8 @@
     <script>window.jQuery || document.write('<script src="css/vendor/jquery-slim.min.js"><\/script>')</script>
     <script src="css/vendor/popper.min.js"></script>
     <script src="css/dist/js/bootstrap.min.js"></script>
-            <!--Script para vincular con ESP32-->
-  <script src="jsarduino/scriptArduino.js"></script>
+    <!--Script para vincular con ESP32-->
+    <script src="jsarduino/scriptArduino.js"></script>
     <!-- Icons -->
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>

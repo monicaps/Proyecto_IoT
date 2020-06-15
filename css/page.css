@@ -93,5 +93,15 @@ body {
 .border-bottom { border-bottom: 1px solid #e5e5e5; }
 
 #cabeceraDescripcion{
-  width: 500px;
+  width: 558px;
+}
+
+.img-fluid{
+  width: 50%;
+  height: 50%;
+}
+
+.rounded.float-left,.img-thumbnail{
+  width: 5%;
+  height: 5%;
 }

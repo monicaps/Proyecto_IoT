@@ -20,7 +20,8 @@ function onConnect(){
 }
 
 function onMessageArrived(message){
-    $("#card-text-msj").html(message.payloadString);
+    $("#mensajesServicios").html(message.payloadString);
+    console.log(message.payloadString);
 }
 
 function doFail(e){
@@ -35,10 +36,11 @@ function onConnectionLost(responseObject){
 
 //funcion que envia el valor a traves del servidor
 function command(value){
-    console.log("Mensaje para mandar llamar a la animacion "+value);
     message= new Paho.MQTT.Message(value+"");
-    message.destinationName="entrada";
+    message.destinationName="Entrada";
     client.send(message);
+    console.log("Mensaje para mandar llamar a la animacion "+value);
+    //console.log(message);
 }
 
 function prueba(){
